@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: campus-chat
+    runtime: node
+    rootDir: backend
+    buildCommand: ""
+    startCommand: node server.js
+    healthCheckPath: /api/health
+
