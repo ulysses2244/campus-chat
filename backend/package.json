@@ -1,0 +1,10 @@
+{
+  "name": "campus-chat-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A dependency-free Node.js backend for a beginner-friendly campus chat demo",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
+
