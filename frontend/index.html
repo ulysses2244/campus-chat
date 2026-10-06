@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>校园聊天室</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <!--
+      整个页面都放在 app-shell 中。
+      JavaScript 不会频繁跳转到不同网页，而是通过给区域添加或删除 hidden class，
+      在“登录视图”和“聊天视图”之间切换。
+    -->
+    <main id="app" class="app-shell">
+      <!-- 登录区域：用户只需要输入昵称即可进入演示聊天室。 -->
+      <section id="login-view" class="login-view">
+        <div class="login-panel">
+          <p class="eyebrow">SCOUT CAMPUS CHAT</p>
+          <h1>校园聊天室</h1>
+          <p class="intro">先输入一个昵称，再和同学建立一对一会话。</p>
+          <!--
+            使用 form 而不是只使用 button，是为了支持用户按 Enter 提交。
+            提交事件会在 app.js 中被拦截，由 JavaScript 调用后端 API。
+          -->
+          <form id="login-form" class="stack-form">
+            <label for="username-input">你的昵称</label>
+            <input id="username-input" name="username" maxlength="20" placeholder="例如：小明" required />
+            <button type="submit" class="primary-button">进入聊天室</button>
+          </form>
+          <p id="login-error" class="error-text" role="alert"></p>
+        </div>
+      </section>
+
+      <!--
+        聊天区域由左右两部分组成：
+        左侧管理当前用户、搜索结果和最近会话；
+        右侧显示当前会话标题、消息和发送框。
+      -->
+      <section id="chat-view" class="chat-view hidden">
+        <aside class="sidebar">
+          <!-- 顶部显示应用名称和退出按钮。 -->
+          <header class="sidebar-header">
+            <div>
+              <p class="eyebrow">CAMPUS CHAT</p>
+              <h1>消息</h1>
+            </div>
+            <button id="logout-button" class="ghost-button" type="button">退出</button>
+          </header>
+
+          <!-- 当前用户信息和 SSE 连接状态。 -->
+          <div class="profile-line">
+            <span class="avatar" id="profile-avatar">?</span>
+            <div>
+              <strong id="profile-name">未登录</strong>
+              <span id="connection-status" class="status-text">连接中...</span>
+            </div>
+          </div>
+
+          <!-- 用户搜索区域。users-list 的内容由 app.js 动态生成。 -->
+          <div class="sidebar-section">
+            <label for="search-input" class="section-title">查找同学</label>
+            <input id="search-input" class="search-input" placeholder="输入昵称搜索" />
+            <div id="users-list" class="list-stack"></div>
+          </div>
+
+          <!-- 最近会话区域。列表会在建立会话或收到新消息后刷新。 -->
+          <div class="sidebar-section conversations-section">
+            <div class="section-title">最近会话</div>
+            <div id="conversations-list" class="list-stack"></div>
+          </div>
+        </aside>
+
+        <!-- 当前会话区域。没有选择会话时显示引导文字。 -->
+        <section class="conversation-panel">
+          <header id="conversation-header" class="conversation-header">
+            <div>
+              <p class="eyebrow">PRIVATE CONVERSATION</p>
+              <h2>选择一个同学开始聊天</h2>
+            </div>
+          </header>
+          <!-- 消息列表由 renderMessages() 根据后端数据生成。 -->
+          <div id="messages-list" class="messages-list empty-state">
+            <p>从左侧查找同学，建立你的第一个会话。</p>
+          </div>
+          <!--
+            发送框默认隐藏，只有选中一个会话后才显示。
+            通过 form 监听 submit，可以同时支持点击“发送”和按 Enter 发送。
+          -->
+          <form id="message-form" class="composer hidden">
+            <input id="message-input" maxlength="1000" placeholder="输入消息，按 Enter 发送" autocomplete="off" />
+            <button type="submit" class="primary-button">发送</button>
+          </form>
+        </section>
+      </section>
+    </main>
+    <script src="/app.js"></script>
+  </body>
+</html>
